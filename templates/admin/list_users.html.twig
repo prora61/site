@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin panel{% endblock %}
+
+{% block body %}
+
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+    <div id="user">Loading...</div>
+
+    <table id="users" class="display">
+        <thead>
+        <tr>
+{#            <th>Имя</th>#}
+{#            <th>Фамилия</th>#}
+{#            <th>Email</th>#}
+        </tr>
+        </thead>
+{#        <tbody>#}
+{#        <?php foreach($users as $user): ?>#}
+{#        <tr>#}
+{#            <td><?php echo $user->getFirstName(); ?></td>#}
+{#            <td><?php echo $user->getLastName(); ?></td>#}
+{#            <td><?php echo $user->getEmail(); ?></td>#}
+{#        </tr>#}
+{#        <?php endforeach; ?>#}
+{#        </tbody>#}
+    </table>
+
+    <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
+    <script>
+        $(function() {
+            $('#user').initDataTables({{ datatable_settings(datatable) }});
+        });
+    </script>
+
+
+
+
+{% endblock %}
