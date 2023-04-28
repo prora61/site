@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Exception\UserAlreadyExistsByEmailException;
 use App\Form\RegistrationFormType;
 use App\Model\SignUpModel;
 use App\Services\SignUpUser;
@@ -23,15 +24,19 @@ class SignUpController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->signUpUser->mapAndSave($user);
+        try{
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->signUpUser->mapAndSave($user);
 
-            return $this->redirectToRoute('home');
+                return $this->redirectToRoute('home');
+            }
+        } catch (UserAlreadyExistsByEmailException $e){
+            echo $e->getMessage();
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ],
+                'registrationForm' => $form->createView(),
+            ],
         );
     }
 }

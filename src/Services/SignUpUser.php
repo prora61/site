@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Entity\User;
-use App\Exception\UserAlreadyExistsException;
+use App\Exception\UserAlreadyExistsByEmailException;
 use App\Model\SignUpModel;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +21,7 @@ class SignUpUser
     public function mapAndSave(SignUpModel $signUpModel): void
     {
         if ($this->userRepository->existByEmail($signUpModel->getEmail())) {
-            throw new UserAlreadyExistsException();
+            throw new UserAlreadyExistsByEmailException();
         }
 
         $user = new User();

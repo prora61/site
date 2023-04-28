@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create User{% endblock %}
+
+{% block body %}
+    <h1>Create User</h1>
+
+    {{ form_start(createUserForm) }}
+    {{ form_row(createUserForm.firstName) }}
+    {{ form_row(createUserForm.lastName) }}
+    {{ form_row(createUserForm.email) }}
+    {{ form_row(createUserForm.roles) }}
+    {{ form_row(createUserForm.password) }}
+    {{ form_row(createUserForm.confirmPassword) }}
+
+    <button type="submit" class="button">Create</button>
+    {{ form_end(createUserForm) }}
+{% endblock %}
