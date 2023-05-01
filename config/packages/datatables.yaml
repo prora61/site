@@ -8,6 +8,7 @@ datatables:
         dom: "<'row' <'col-sm-7' ftr>><'row' <'col-sm-6'l><'col-sm-6 text-right'pi>>"
         searching: true
 
+
     template_parameters:
         # Example classes to integrate nicely with Bootstrap 3.x
         className: 'table table-striped table-bordered table-hover data-table'

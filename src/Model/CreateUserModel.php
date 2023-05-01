@@ -2,12 +2,15 @@
 
 namespace App\Model;
 
+use App\Entity\User;
+use App\Validator\UniqueDTO;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CreateUserModel
+class CreateUserModel extends Constraint
 {
     #[NotBlank]
     private string $firstName;
@@ -17,6 +20,7 @@ class CreateUserModel
 
     #[Email]
     #[NotBlank]
+//    #[UniqueDTO]
     private string $email;
 
     #[NotBlank]
@@ -34,9 +38,11 @@ class CreateUserModel
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
+
+        return $this;
     }
 
     public function getLastName(): string
@@ -44,9 +50,11 @@ class CreateUserModel
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): void
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -54,9 +62,11 @@ class CreateUserModel
         return $this->email;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 
     public function getPassword(): string
@@ -64,9 +74,11 @@ class CreateUserModel
         return $this->password;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
     }
 
     public function isRoles(): bool
@@ -74,9 +86,11 @@ class CreateUserModel
         return $this->roles;
     }
 
-    public function setRoles(bool $roles): void
+    public function setRoles(bool $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
     }
 
     public function getConfirmPassword(): string
@@ -84,8 +98,10 @@ class CreateUserModel
         return $this->confirmPassword;
     }
 
-    public function setConfirmPassword(string $confirmPassword): void
+    public function setConfirmPassword(string $confirmPassword): self
     {
         $this->confirmPassword = $confirmPassword;
+
+        return $this;
     }
 }

@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Exception\UserAlreadyExistsByEmailException;
+use App\Exception\UserNotFoundException;
 use App\Form\CreateUserForm;
+use App\Form\EditUserForm;
 use App\Model\CreateUserModel;
-use App\Services\AdminService\CreateUserService;
+use App\Model\EditUserModel;
+use App\Services\AdminService;
 use Doctrine\ORM\EntityManagerInterface;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\NumberColumn;
@@ -22,25 +25,25 @@ class AdminController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CreateUserService $createUserService
+        private readonly AdminService $adminService
     ) {
     }
 
     #[Route(path: '/admin', name: 'admin_start')]
     public function index(): Response
     {
-        //        $str = 'wertyuiopsdfghcxjvbnm';
-        //        for ($i=0; $i < 101; $i++){
-        //            $user = new User();
-        //            $user->setFirstName('test')
-        //                ->setLastName('test')
-        //                ->setRoles(['ROLE_USER'])
-        //                ->setEmail(str_shuffle($str).'@mail.ru');
-        //            $user->setPassword('testpas');
-        //            $this->em->persist($user);
-        //        }
-        //
-        //        $this->em->flush();
+//                $str = 'wertyuiopsdfghcxjvbnm';
+//                for ($i=0; $i < 10; $i++){
+//                    $user = new User();
+//                    $user->setFirstName('elala')
+//                        ->setLastName('wfas')
+//                        ->setRoles(['ROLE_USER'])
+//                        ->setEmail(str_shuffle($str).'@mail.ru');
+//                    $user->setPassword('testpas');
+//                    $this->em->persist($user);
+//                }
+//
+//                $this->em->flush();
         return $this->json('null');
     }
 
@@ -56,7 +59,7 @@ class AdminController extends AbstractController
             ->add('firstName', TextColumn::class, ['label' => 'firstName', 'searchable' => true])
             ->add('lastName', TextColumn::class, ['label' => 'lastName', 'searchable' => true])
             ->add('email', TextColumn::class, ['label' => 'email', 'searchable' => true])
-            ->createAdapter(ORMAdapter::class, [
+            ->createAdapter (ORMAdapter::class, [
                 'entity' => User::class,
                 'query' => function ($builder) {
                     $builder
@@ -78,31 +81,57 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/users/delete', name: 'delete_user', methods: ['DELETE'])]
     public function deleteUser(Request $request): Response
     {
-//        $data = $request->getContent();
-
-        $response = array('success' => true);
+        $id = $request->request->get('id');
+        $response = $this->adminService->deleteUser($id);
 
         return $this->json($response);
     }
 
-    #[Route(path: '/admin/users/create', name: 'create_user')]
+    #[Route(path: '/admin/users/create', name: 'create_user', methods: ['GET', 'POST'])]
     public function createUser(Request $request): Response
     {
         $user = new CreateUserModel();
         $form = $this->createForm(CreateUserForm::class, $user);
         $form->handleRequest($request);
 
-        try{
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->createUserService->mapAndSave($user);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $response = $this->adminService->createUser($user);
+            return $this->json($response);
 //                return $this->redirectToRoute('user_list');
-            }
-        } catch (UserAlreadyExistsByEmailException $e){
-            echo $e->getMessage();
         }
 
         return $this->render('admin/create_user.html.twig', [
             'createUserForm' => $form->createView(),
+        ],
+        );
+    }
+
+    #[Route(path: '/admin/users/update/{id}', name: 'update_user_list')]
+    public function updateUserList(int $id, Request $request): Response
+    {
+        $user = $this->adminService->getUser($id);
+        $form = $this->createForm(EditUserForm::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $response = $this->adminService->updateUser($request);
+            if ($response['success'] === true) {
+                return $this->redirectToRoute('user_list');
+            }
+            else {
+                return $this->json($response);
+            }
+        }
+
+//            $url = $this->generateUrl('update_user_list', [
+//                'id' => $id
+//            ]);
+//            return $this->redirect($url);
+
+
+        return $this->render('admin/edit_user.html.twig', [
+            'user' => $user,
+            'editUserForm' => $form->createView(),
         ],
         );
     }

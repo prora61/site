@@ -12,129 +12,95 @@
     <style>
         .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
         .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-        tfoot input {
-            width: 100%;
-            padding: 3px;
-            box-sizing: border-box;
-        }
     </style>
 
-
-
     <div id="del_user">
-        <button id="del_user_btn" class="del">Delete selected row</button>
+        <button id="del_user_btn" class="button">Delete selected row</button>
     </div>
     <div id="new_user">
         <input type="button" value="Add new user" onClick='location.href="{{ path('create_user') }}"'>
     </div>
-    <div id="edit_user">
-        <button id="edit_user_btn" class="intable_btn">Edit user</button>
+{#    <div id="edit_user">#}
+{#        <input type="button" id="edit_user_btn" class="intable_btn" value="Edit new user" onClick='location.href="{{ path('update_user_list', {id: user.id}) }}"'>#}
+{#    </div>#}
+
+    <a href=""></a>
+    <div id="del_user">
+        <button id="edit_user_btn" class="button">Edit new user</button>
     </div>
-
-    <div class = "table">
-        <table id="example" class="display" style="width:100%">
-            <thead>
-            <tr>
-                <th>firstName</th>
-                <th>lastName</th>
-                <th>email</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Ivan</td>
-                <td>Ivanov</td>
-                <td>mail2313@mail.ru</td>
-            </tr>
-            <tr>
-                <td>Oleg</td>
-                <td>Ivanov</td>
-                <td>mail32@mail.ru</td>
-            </tr>
-            <tr>
-                <td>Petr</td>
-                <td>Zasdas</td>
-                <td>mail23@mail.ru</td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <th>firstName</th>
-                <th>lastName</th>
-                <th>email</th>
-            </tr>
-            </tfoot>
-        </table>
-    </div>
-
-
     <div id="user">Loading...</div>
+
 
     <script src="{{ asset('bundles/datatables/js/datatables.js') }}"></script>
     <script>
-        let url = '{{ path("delete_user") }}';
         $(document).ready(function () {
-            $(function() {
-                $('#user').initDataTables({{ datatable_settings(datatable) }}, {
-                    'processing': true,
-                    'serverSide': true,
-                }).then(function (dt) {
-                    dt.on('action', function ( config) {
-                        console.log( 'Button '+config.action+' was activated' );
-                    })
-                });
+        $('.dataTables_filter input').off(); //
+            $('#user').initDataTables({{ datatable_settings(datatable) }}, {
+                'processing': false,
+                'serverSide': true,
+            }).then(function (dt) {
+                dt.on('click', 'tr', function () {
+                    if ($(this).hasClass('selected')) {
+                        $(this).removeClass('selected');
+                    } else {
+                        dt.$('.selected').removeClass('selected');
+                        $(this).addClass('selected');
+                    }
+                })
+                $('#del_user_btn').click(function () {
+                    let url = '{{ path("delete_user") }}';
+                    if (dt.row('.selected').id() != null) {
+                        let data = dt.row('.selected').id();
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                            data: {'id': data},
+                            success: function (response) {
+                                if (response.success) {
+                                    console.log(response);
+                                    dt.row('selected').remove().draw(false);
+                                } else {
+                                    console.log(response);
+                                    alert(response.message + ' ' + response.code);
+                                }
+                            },
+                            error: function (xhr) {
+                                let errorInfo = 'Error request: ' + '[' + xhr.status + ' ' + xhr.statusText + ']';
+                                console.log('ajaxError xhr:', xhr);
+                                alert(errorInfo);
+                            }
+                        });
+                    } else {
+                        alert('Select the row to delete!')
+                    }
+                })
+                $('#edit_user_btn').click(function () {
+                    if (dt.row('.selected').id() != null) {
+                        let data = dt.row('.selected').id();
+                        // let par = parseInt(data);
+                        {#let url = '{{ path('update_user_list') }}';#}
+                        // $.get('/admin/users/update', {id: data});
+                        $.ajax({
+                            url: '/admin/users/update',
+                            type: 'GET',
+                            data: {'id': data},
+                            success: function (response) {
+                                dt.$('.selected').removeClass('selected'); //
+                                console.log(response);
+                            },
+                            error: function (xhr) {
+                                let errorInfo = 'Error request: ' + '[' + xhr.status + ' ' + xhr.statusText + ']';
+                                console.log('ajaxError xhr:', xhr);
+                                alert(errorInfo);
+                            }
+                        });
+                    } else {
+                        alert('Select the row to edit!')
+                    }
+                })
             });
         });
-
-            //         $.ajax({
-            //             url: url,
-            //             type: 'POST',
-            //             data: {userId: Id},
-            //             success: function (response) {
-            //                 console.log(response);
-            //                 $('#user').DataTable().ajax.reload();
-            //             },
-            //             error: function (xhr, status, error) {
-            //                 console.log(error);
-            //             }
-            //         });
-
-
-
-            // //поиск по столбцам
-            // $('#example tfoot th').each(function () {
-            //     let title = $(this).text();
-            //     $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-            // });
-            // let table = $('#example').DataTable({
-            //     initComplete: function () {
-            //         this.api()
-            //             .columns()
-            //             .every(function () {
-            //                 let that = this;
-            //                 $('input', this.footer()).on('keyup change clear', function () {
-            //                     if (that.search() !== this.value) {
-            //                         that.search(this.value).draw();
-            //                     }
-            //                 });
-            //             });
-            //     },
-            // });
-            // $('#example tfoot tr').appendTo('#example thead');
-            //
-            // //удаление строки
-            // $('#example tbody').on('click', 'tr', function () {
-            //     if ($(this).hasClass('selected')) {
-            //         $(this).removeClass('selected');
-            //     } else {
-            //         table.$('tr.selected').removeClass('selected');
-            //         $(this).addClass('selected');
-            //     }
-            // });
-            // $('#del_user').click(function () {
-            //     table.row('.selected').remove().draw(false);
-            // })
-
     </script>
 
 
