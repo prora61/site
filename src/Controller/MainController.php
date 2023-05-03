@@ -9,10 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
-    public function __construct()
-    {
-    }
-
     #[Route(path: '/home', name: 'home')]
     public function index(): Response
     {

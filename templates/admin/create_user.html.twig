@@ -3,16 +3,23 @@
 {% block title %}Admin panel{% endblock %}
 
 {% block body %}
-    <h1>Create User</h1>
-
-    {{ form_start(createUserForm) }}
-    {{ form_row(createUserForm.firstName) }}
-    {{ form_row(createUserForm.lastName) }}
-    {{ form_row(createUserForm.email) }}
-    {{ form_row(createUserForm.roles) }}
-    {{ form_row(createUserForm.password) }}
-    {{ form_row(createUserForm.confirmPassword) }}
-
-    <button type="submit" class="button">Create</button>
-    {{ form_end(createUserForm) }}
+    <h1 class="d-flex flex-center flex-column-fluid pb-1 pb-lg-3 pt-3">Create User</h1>
+    <div class="d-flex flex-center flex-column-fluid pb-15 pb-lg-20">
+        {{ form_start(createUserForm, {'attr': {'style': 'width: 25%;'}}) }}
+        {{ form_row(createUserForm.firstName) }}
+        {{ form_row(createUserForm.lastName) }}
+        {{ form_row(createUserForm.email) }}
+        {{ form_row(createUserForm.roles) }}
+        {{ form_row(createUserForm.password) }}
+        {{ form_row(createUserForm.confirmPassword) }}
+        <div class="d-grid mb-10">
+            <button type="submit" id="create_btn" class="btn btn-primary">
+                <span class="indicator-label">Create</span>
+                <span class="indicator-progress">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+            </button>
+        </div>
+        {{ form_end(createUserForm) }}
+    </div>
 {% endblock %}

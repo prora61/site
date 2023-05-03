@@ -1,18 +1,28 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_reg_auth.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.firstName) }}
-        {{ form_row(registrationForm.lastName) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.password) }}
-        {{ form_row(registrationForm.confirmPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="button">Sign Up</button>
-    {{ form_end(registrationForm) }}
+    <h1 class="d-flex flex-center flex-column-fluid pb-1 pb-lg-3 pt-3">Sign Up</h1>
+        <div class="d-flex flex-center flex-column-fluid pb-15 pb-lg-20">
+            {{ form_start(registrationForm, {'attr': {'style': 'width: 25%;'}}) }}
+            {{ form_row(registrationForm.firstName) }}
+            {{ form_row(registrationForm.lastName) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.password) }}
+            {{ form_row(registrationForm.confirmPassword) }}
+            {{ form_row(registrationForm.agreeTerms) }}
+            <div class="d-grid mb-10">
+                <button type="submit" id="update_btn" class="btn btn-primary">
+                    <span class="indicator-label">Sign up</span>
+                    <span class="indicator-progress">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+            </div>
+            {{ form_end(registrationForm) }}
+        </div>
 {% endblock %}
+
+
+

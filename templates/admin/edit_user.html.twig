@@ -3,13 +3,20 @@
 {% block title %}Admin panel{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
-
-    {{ form_start(editUserForm) }}
-    {{ form_row(editUserForm.firstName) }}
-    {{ form_row(editUserForm.lastName) }}
-    {{ form_row(editUserForm.email) }}
-
-    <button type="submit" class="button" id="update_btn">Edit</button>
-    {{ form_end(editUserForm) }}
+    <h1 class="d-flex flex-center flex-column-fluid pb-1 pb-lg-3 pt-3">Edit User</h1>
+    <div class="d-flex flex-center flex-column-fluid pb-15 pb-lg-20">
+        {{ form_start(editUserForm, {'attr': {'style': 'width: 25%;'}}) }}
+        {{ form_row(editUserForm.firstName) }}
+        {{ form_row(editUserForm.lastName) }}
+        {{ form_row(editUserForm.email) }}
+        <div class="d-grid mb-10">
+            <button type="submit" id="edit_btn" class="btn btn-primary">
+                <span class="indicator-label">Edit</span>
+                <span class="indicator-progress">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+            </button>
+        </div>
+        {{ form_end(editUserForm) }}
+    </div>
 {% endblock %}
