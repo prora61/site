@@ -5,7 +5,9 @@ datatables:
     options:
         lengthMenu : [10, 25, 50]
         pageLength: 10
-        dom: "<'row' <'col-sm-12' ftr>><'row' <'col-sm-6'l><'col-sm-6 text-right'pi>>"
+        dom: "<'row' <'col-sm-8 mx-auto text-right'f>>
+        <'row' <'col-sm-8 mx-auto text-center't>>
+        <'row' <'col-sm-2'><'col-sm-1'l><'col-sm-2'i><'col-sm-5 mx-auto text-right'p><'col-sm-2'>>"
         searching: true
         autoWidth: true
 

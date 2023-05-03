@@ -2,15 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\CreateUserForm;
 use App\Form\EditUserForm;
+use App\Form\ListUsersForm;
 use App\Model\CreateUserModel;
 use App\Services\AdminService;
-use Doctrine\ORM\EntityManagerInterface;
-use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
-use Omines\DataTablesBundle\Column\NumberColumn;
-use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,15 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
-    public function __construct(
-        private readonly EntityManagerInterface $em,
-        private readonly AdminService $adminService
-    ) {
+    public function __construct(private readonly AdminService $adminService)
+    {
     }
 
-    #[Route(path: '/admin', name: 'admin_start')]
-    public function index(): Response
-    {
+//    #[Route(path: '/admin', name: 'admin_start')]
+//    public function index(): Response
+//    {
 //                $str = 'wertyuiopsdfghcxjvbnm';
 //                for ($i=0; $i < 10; $i++){
 //                    $user = new User();
@@ -40,32 +34,14 @@ class AdminController extends AbstractController
 //                }
 //
 //                $this->em->flush();
-
-        return $this->json('null');
-    }
+//        return $this->json('null');
+//    }
 
     #[Route(path: '/admin/users', name: 'user_list')]
     public function listUsers(Request $request, DataTableFactory $dataTableFactory): Response
     {
-//        $table = $dataTableFactory
-//            ->createFromType(ListUsersDatatable::class)
-//            ->handleRequest($request);
-
-        $table = $dataTableFactory->create()
-            ->add('id', NumberColumn::class, ['label' => 'id', 'searchable' => false, 'visible' => false])
-            ->add('firstName', TextColumn::class, ['label' => 'firstName', 'searchable' => true])
-            ->add('lastName', TextColumn::class, ['label' => 'lastName', 'searchable' => true])
-            ->add('email', TextColumn::class, ['label' => 'email', 'searchable' => true])
-            ->createAdapter (ORMAdapter::class, [
-                'entity' => User::class,
-                'query' => function ($builder) {
-                    $builder
-                        ->select('u')
-                        ->from(User::class, 'u')
-                        ->where('u.roles = :role')
-                        ->setParameter('role', 'ROLE_USER');
-                },
-            ])
+        $table = $dataTableFactory
+            ->createFromType(ListUsersForm::class)
             ->handleRequest($request);
 
         if ($table->isCallback()) {
