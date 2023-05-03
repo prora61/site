@@ -22,7 +22,7 @@ class CreateUserForm extends AbstractType
             ->add('password', PasswordType::class)
             ->add('confirmPassword', PasswordType::class)
             ->add('roles', ChoiceType::class, [
-                'choices'  => [
+                'choices' => [
                     'Roles' => [
                         'User' => false,
                         'Administrator' => true,

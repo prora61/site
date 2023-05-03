@@ -9,14 +9,13 @@ use App\Model\CreateUserModel;
 use App\Model\EditUserModel;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AdminService
 {
-    public function __construct(private readonly EntityManagerInterface      $em,
-                                private readonly UserPasswordHasherInterface $hasher,
-                                private readonly UserRepository              $userRepository)
+    public function __construct(private readonly EntityManagerInterface $em,
+        private readonly UserPasswordHasherInterface $hasher,
+        private readonly UserRepository $userRepository)
     {
     }
 
@@ -30,7 +29,7 @@ class AdminService
             $user = new User();
             $user->setFirstName($createUserModel->getFirstName())
                 ->setLastName($createUserModel->getLastName())
-                ->setRoles(($createUserModel->isRoles() ? ['ROLE_ADMIN'] : ['ROLE_USER']))
+                ->setRoles($createUserModel->isRoles() ? ['ROLE_ADMIN'] : ['ROLE_USER'])
                 ->setEmail($createUserModel->getEmail());
             $user->setPassword($this->hasher->hashPassword($user, $createUserModel->getPassword()));
 
@@ -44,14 +43,14 @@ class AdminService
             $response = [
                 'success' => false,
                 'message' => $e->getMessage(),
-                'code' => $e->getCode()
+                'code' => $e->getCode(),
             ];
         } catch (\Throwable $error) {
-            //logger
+            // logger
             $response = [
                 'success' => false,
                 'message' => $error->getMessage(),
-                'code' => $error->getCode()
+                'code' => $error->getCode(),
             ];
         }
 
@@ -70,30 +69,27 @@ class AdminService
             $response = [
                 'success' => false,
                 'message' => $e->getMessage(),
-                'code' => $e->getCode()
+                'code' => $e->getCode(),
             ];
         } catch (\Throwable $error) {
-            //logger
+            // logger
             $response = [
                 'success' => false,
                 'message' => $error->getMessage(),
-                'code' => $error->getCode()
+                'code' => $error->getCode(),
             ];
         }
 
         return $response;
     }
 
-    public function updateUser(Request $request): array
+    public function updateUser(EditUserModel $editUserModel): array
     {
         try {
-            $id = $request->request->get('id');
-
-            $user = $this->userRepository->getUserById($id);
-
-            $user->setFirstName($request->request->get('firstName'))
-                ->setLastName($request->request->get('lastName'))
-                ->setEmail($request->request->get('email'));
+            $user = $this->userRepository->getUserById($editUserModel->getId());
+            $user->setFirstName($editUserModel->getFirstName())
+                ->setLastName($editUserModel->getLastName())
+                ->setEmail($editUserModel->getEmail());
 
             $this->em->persist($user);
             $this->em->flush();
@@ -105,25 +101,26 @@ class AdminService
             $response = [
                 'success' => false,
                 'message' => $e->getMessage(),
-                'code' => $e->getCode()
+                'code' => $e->getCode(),
             ];
         } catch (\Throwable $error) {
-            //logger
+            // logger
             $response = [
                 'success' => false,
                 'message' => $error->getMessage(),
-                'code' => $error->getCode()
+                'code' => $error->getCode(),
             ];
         }
 
         return $response;
     }
 
-    public function getUser(int $id): EditUserModel
+    public function map(int $id): EditUserModel
     {
         $user = $this->userRepository->getUserById($id);
 
         return (new EditUserModel())
+            ->setId($user->getId())
             ->setFirstName($user->getFirstName())
             ->setLastName($user->getLastName())
             ->setEmail($user->getEmail());

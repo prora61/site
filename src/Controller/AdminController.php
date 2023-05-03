@@ -3,18 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Exception\UserAlreadyExistsByEmailException;
-use App\Exception\UserNotFoundException;
 use App\Form\CreateUserForm;
 use App\Form\EditUserForm;
 use App\Model\CreateUserModel;
-use App\Model\EditUserModel;
 use App\Services\AdminService;
 use Doctrine\ORM\EntityManagerInterface;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Omines\DataTablesBundle\Column\NumberColumn;
 use Omines\DataTablesBundle\Column\TextColumn;
-use Omines\DataTablesBundle\DataTable;
 use Omines\DataTablesBundle\DataTableFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,6 +40,7 @@ class AdminController extends AbstractController
 //                }
 //
 //                $this->em->flush();
+
         return $this->json('null');
     }
 
@@ -93,7 +90,6 @@ class AdminController extends AbstractController
         $user = new CreateUserModel();
         $form = $this->createForm(CreateUserForm::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $response = $this->adminService->createUser($user);
             return $this->json($response);
@@ -106,15 +102,16 @@ class AdminController extends AbstractController
         );
     }
 
-    #[Route(path: '/admin/users/update/{id}', name: 'update_user_list')]
-    public function updateUserList(int $id, Request $request): Response
+    #[Route(path: '/admin/users/update', name: 'update_user_list', methods: ['GET', 'POST'])]
+    public function updateUserList(Request $request): Response
     {
-        $user = $this->adminService->getUser($id);
+        $id = $request->query->get('id');
+        $user = $this->adminService->map($id);
         $form = $this->createForm(EditUserForm::class, $user);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $response = $this->adminService->updateUser($request);
+            $response = $this->adminService->updateUser($user);
             if ($response['success'] === true) {
                 return $this->redirectToRoute('user_list');
             }
@@ -123,14 +120,7 @@ class AdminController extends AbstractController
             }
         }
 
-//            $url = $this->generateUrl('update_user_list', [
-//                'id' => $id
-//            ]);
-//            return $this->redirect($url);
-
-
         return $this->render('admin/edit_user.html.twig', [
-            'user' => $user,
             'editUserForm' => $form->createView(),
         ],
         );

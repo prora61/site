@@ -3,11 +3,11 @@ datatables:
     # Set options, as documented at https://datatables.net/reference/option/
     method: POST
     options:
-        lengthMenu : [10, 25, 50, 100]
+        lengthMenu : [10, 25, 50]
         pageLength: 10
-        dom: "<'row' <'col-sm-7' ftr>><'row' <'col-sm-6'l><'col-sm-6 text-right'pi>>"
+        dom: "<'row' <'col-sm-12' ftr>><'row' <'col-sm-6'l><'col-sm-6 text-right'pi>>"
         searching: true
-
+        autoWidth: true
 
     template_parameters:
         # Example classes to integrate nicely with Bootstrap 3.x
