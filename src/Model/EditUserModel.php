@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Validator\UniqueDTO;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -19,6 +20,7 @@ class EditUserModel extends Constraint
 
     #[Email]
     #[NotBlank]
+    #[UniqueDTO]
     private string $email;
 
     public function getFirstName(): string

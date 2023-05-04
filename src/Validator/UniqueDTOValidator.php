@@ -2,21 +2,14 @@
 
 namespace App\Validator;
 
-use App\Entity\User;
-use App\Model\CreateUserModel;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class UniqueDTOValidator extends ConstraintValidator
 {
-    public function __construct(
-        private readonly EntityManagerInterface $em,
-        private readonly UserRepository $userRepository,
-        private readonly CreateUserModel $createUserModel)
+    public function __construct(private readonly UserRepository $userRepository)
     {
     }
 
@@ -30,11 +23,9 @@ class UniqueDTOValidator extends ConstraintValidator
             return;
         }
 
-        if (!is_string($value)) {
-            throw new UnexpectedValueException($value, 'string');
+        if ($this->userRepository->existByEmail($value)) {
+            $this->context->buildViolation($constraint->message)
+                ->addViolation();
         }
-
-
-
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Validator\UniqueDTO;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\Length;
@@ -17,6 +18,7 @@ class SignUpModel
 
     #[Email]
     #[NotBlank]
+    #[UniqueDTO]
     private string $email;
 
     #[NotBlank]

@@ -67,9 +67,8 @@ class AdminController extends AbstractController
         $form = $this->createForm(CreateUserForm::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $response = $this->adminService->createUser($user);
-            return $this->json($response);
-//                return $this->redirectToRoute('user_list');
+            $this->adminService->createUser($user);
+            return $this->json('User created!');
         }
 
         return $this->render('admin/create_user.html.twig', [

@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-use App\Entity\User;
 use App\Validator\UniqueDTO;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Email;
@@ -20,7 +19,7 @@ class CreateUserModel extends Constraint
 
     #[Email]
     #[NotBlank]
-//    #[UniqueDTO]
+    #[UniqueDTO]
     private string $email;
 
     #[NotBlank]

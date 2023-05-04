@@ -3,27 +3,20 @@
 namespace App\Services;
 
 use App\Entity\User;
-use App\Exception\UserAlreadyExistsByEmailException;
 use App\Model\SignUpModel;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class SignUpUser
+class SignUpUserService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly UserPasswordHasherInterface $hasher,
-        private readonly UserRepository $userRepository)
+        private readonly UserPasswordHasherInterface $hasher)
     {
     }
 
     public function mapAndSave(SignUpModel $signUpModel): void
     {
-        if ($this->userRepository->existByEmail($signUpModel->getEmail())) {
-            throw new UserAlreadyExistsByEmailException();
-        }
-
         $user = new User();
         $user->setFirstName($signUpModel->getFirstName())
             ->setLastName($signUpModel->getLastName())
