@@ -5,21 +5,14 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
 
-        <script src={{ asset('metronic/plugins/global/plugins.bundle.js') }}></script>
-        <script src={{ asset('metronic/js/scripts.bundle.js') }}></script>
-        <link href="{{ asset("metronic/css/style.bundle.css") }}" rel="stylesheet" type="text/css" />
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.2.1/dt-1.10.16/datatables.min.css"/>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.2.1/dt-1.10.16/datatables.min.js"></script>
-
-
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+            {{ encore_entry_script_tags('plugins') }}
+            {{ encore_entry_script_tags('scripts') }}
+{#            <script src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/datatables.min.js"></script>#}
         {% endblock %}
     </head>
 
