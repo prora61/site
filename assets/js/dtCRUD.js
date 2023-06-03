@@ -44,23 +44,10 @@ $(document).ready(function () {
             }
         })
         $('#edit_user_btn').click(function () {
-            let url = $('#edit_user_btn').data('path');
             if (dt.row('.selected').id() != null) {
                 let data = dt.row('.selected').id();
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {id: data},
-                    success: function (response) {
-                        window.location.href = url + "?id=" + data;
-                        console.log(response);
-                    },
-                    error: function (xhr) {
-                        let errorInfo = 'Error request: ' + '[' + xhr.status + ' ' + xhr.statusText + ']';
-                        console.log('ajaxError xhr:', xhr);
-                        alert(errorInfo);
-                    }
-                });
+                window.location.href = "/admin/users/" + data + "/update";
+                dt.row('selected').remove().draw(false);
             } else {
                 alert('Select the row to edit!')
             }

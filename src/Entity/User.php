@@ -3,16 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use App\Validator\UniqueDTO;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-//#[UniqueEntity(fields: 'email', message: 'A user with such an email is already exists', entityClass: User::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -119,7 +116,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->firstName = $firstName;
 
         return $this;
-
     }
 
     public function getLastName(): ?string

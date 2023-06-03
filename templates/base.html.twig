@@ -12,12 +12,10 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('plugins') }}
             {{ encore_entry_script_tags('scripts') }}
-{#            <script src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/datatables.min.js"></script>#}
         {% endblock %}
     </head>
 
     <body  id="kt_app_body" data-kt-app-layout="dark-header" data-kt-app-header-fixed="false" data-kt-app-toolbar-enabled="true" class="app-default">
-    <script>var defaultThemeMode = "dark"; var themeMode; if ( document.documentElement ) { if ( document.documentElement.hasAttribute("data-bs-theme-mode")) { themeMode = document.documentElement.getAttribute("data-bs-theme-mode"); } else { if ( localStorage.getItem("data-bs-theme") !== null ) { themeMode = localStorage.getItem("data-bs-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-bs-theme", themeMode); }</script>
     <!--begin::Header-->
     <div id="kt_app_header" class="app-header">
         <!--begin::Header container-->

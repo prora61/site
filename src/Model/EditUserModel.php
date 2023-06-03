@@ -20,7 +20,7 @@ class EditUserModel extends Constraint
 
     #[Email]
     #[NotBlank]
-    #[UniqueDTO]
+//    #[UniqueDTO]
     private string $email;
 
     public function getFirstName(): string

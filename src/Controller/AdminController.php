@@ -23,7 +23,7 @@ class AdminController extends AbstractController
 //    public function index(): Response
 //    {
 //                $str = 'wertyuiopsdfghcxjvbnm';
-//                for ($i=0; $i < 10; $i++){
+//                for ($i=0; $i < 10000; $i++){
 //                    $user = new User();
 //                    $user->setFirstName('elala')
 //                        ->setLastName('wfas')
@@ -68,6 +68,7 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->adminService->createUser($user);
+
             return $this->json('User created!');
         }
 
@@ -77,20 +78,18 @@ class AdminController extends AbstractController
         );
     }
 
-    #[Route(path: '/admin/users/update', name: 'update_user_list', methods: ['GET', 'POST'])]
-    public function updateUserList(Request $request): Response
+    #[Route(path: '/admin/users/{id}/update', name: 'update_user_list', methods: ['GET', 'PATCH'])]
+    public function updateUserList(int $id, Request $request): Response
     {
-        $id = $request->query->get('id');
         $user = $this->adminService->map($id);
-        $form = $this->createForm(EditUserForm::class, $user);
+        $form = $this->createForm(EditUserForm::class, $user, ['method' => 'PATCH']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $response = $this->adminService->updateUser($user);
-            if ($response['success'] === true) {
+            if (true === $response['success']) {
                 return $this->redirectToRoute('user_list');
-            }
-            else {
+            } else {
                 return $this->json($response);
             }
         }

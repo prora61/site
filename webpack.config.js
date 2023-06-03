@@ -72,11 +72,4 @@ Encore
     //.autoProvidejQuery()
 ;
 
-// if (Encore.isProduction()) {
-//     Encore.setPublicPath('https://cdn.datatables.net/v/dt/jq-3.2.1/dt-1.10.16/datatables.min.js');
-//
-//                 +     // (e.g. "build/dashboard.js": "https://my-cool-app.com.global.prod.fastly.net/dashboard.js")
-//     Encore.setManifestKeyPrefix('build/');
-// }
-
 module.exports = Encore.getWebpackConfig();
